@@ -5,19 +5,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class Evento {
+    SimpleDateFormat numberFromDate = new SimpleDateFormat("yyyyMMdd");
+
     private String titolo;
     private int giorno;
     private int mese;
     private int anno;
     private String data;
-    private final int postiTotali;
+    private int postiTotali = 0;
     private int postiPrenotati;
 
     // Costruttore
     public Evento(String titolo, int giorno, int mese, int anno, int postiTotali) {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        String timeStamp = numberFromDate.format(Calendar.getInstance().getTime());
         String temp = anno + Funct.numberFormatted(mese) + Funct.numberFormatted(giorno);
         if (Integer.parseInt(timeStamp) > Integer.parseInt(temp)) {
+            System.out.println(timeStamp);
+            System.out.println(temp);
             throw new IllegalArgumentException("La data dell'evento non è più disponibile.");
         }
         if (postiTotali <= 0) {
@@ -46,30 +50,36 @@ public class Evento {
     }
 
     public int getPostiTotali() {
-        return postiTotali;
+        return this.postiTotali;
     }
 
     public int getPostiPrenotati() {
-        return postiPrenotati;
+        return this.postiPrenotati;
     }
 
     // Metodi
-    public void prenota() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+    public void prenota(int postiDaPrenotare) {
+        numberFromDate.format(Calendar.getInstance().getTime());
         String temp = anno + Funct.numberFormatted(mese) + Funct.numberFormatted(giorno);
         if (Integer.parseInt(timeStamp) > Integer.parseInt(temp)) {
             System.out.println("L'evento è già passato, non è possibile prenotare.");
-            return;
         }
-        if (postiPrenotati >= postiTotali) {
+        int postiNecessari = getPostiPrenotati() + postiDaPrenotare;
+        if (postiNecessari > this.postiTotali) {
             System.out.println("Non ci sono posti disponibili.");
-            return;
+            // System.out.println("I posti disponibili attualmente sono: " +
+            // (getPostiTotali() - getPostiTotali()));
+        } else {
+            for (int i = 0; i < postiNecessari; i++) {
+                this.postiPrenotati++;
+            }
+            System.out.println("Hai prenotato: " + postiNecessari + ".");
         }
-        postiPrenotati++;
+
     }
 
     public void disdici() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        String timeStamp = numberFromDate.format(Calendar.getInstance().getTime());
         String temp = anno + Funct.numberFormatted(mese) + Funct.numberFormatted(giorno);
         if (Integer.parseInt(timeStamp) > Integer.parseInt(temp)) {
             System.out.println("L'evento è già passato, non è possibile disdire.");

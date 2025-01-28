@@ -1,10 +1,19 @@
 package org.mileston.evento;
 
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Concerto concerto = new Concerto("Evento", 01, 7, 2025, 100, LocalTime.of(20, 0), 65.9);
+
+        System.err.println(concerto.getDate());
+        System.err.println(concerto.getOra());
+        System.err.println(concerto.getDataEOraFormattata());
+        System.err.println(concerto.getPostiTotali());
+        System.err.println(concerto.toString());
+        System.out.println(concerto.getPrezzoFormattato());
 
         try {
             // Creazione di un nuovo evento
@@ -27,27 +36,18 @@ public class Main {
             System.out.println("Evento creato: " + evento);
 
             // Prenotazioni
-            System.out.println("Vuoi fare delle prenotazioni? (sì/no):");
+            System.out.println("Vuoi fare una prenotazioni? (sì/no):");
             scanner.nextLine(); // Consuma la nuova riga rimasta dal precedente nextInt()
             String risposta = scanner.nextLine().trim().toLowerCase();
 
             if (risposta.equals("sì") || risposta.equals("si")) {
                 System.out.println("Quanti posti vuoi prenotare?");
                 int postiDaPrenotare = scanner.nextInt();
-                for (int i = 0; i < postiDaPrenotare; i++) {
-                    try {
-                        evento.prenota();
-                    } catch (IllegalStateException e) {
-                        System.out.println("Errore durante la prenotazione: " + e.getMessage());
-                        break;
-                    }
-                }
-                System.out.println("Posti prenotati: " + evento.getPostiPrenotati());
-                System.out.println("Posti disponibili: " + (evento.getPostiTotali() - evento.getPostiPrenotati()));
+                evento.prenota(postiDaPrenotare);
             }
 
             // Disdette
-            System.out.println("Vuoi disdire delle prenotazioni? (sì/no):");
+            System.out.println("Vuoi disdire prenotazioni? (sì/no):");
             scanner.nextLine();
             risposta = scanner.nextLine().trim().toLowerCase();
 
